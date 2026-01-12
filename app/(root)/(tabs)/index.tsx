@@ -1,8 +1,8 @@
+import Search from '@/components/Search';
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 import { Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 
 
@@ -25,6 +25,7 @@ export default function Index() {
           <Image source={icons.bell} className="size-6"/>
       </View>
       </View>
+      <Search/>
     </ScrollView>
    </SafeAreaView>
   );
