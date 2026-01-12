@@ -23,7 +23,7 @@ const Search = () => {
         debounceSearch(text)
     }
     return (
-        <View className='flex flex-row items-center mx-3 justify-between w-[95%] px-5 rounded-lg bg-gray-100 border border-gray-100 mt-5 py-2'>
+        <View className='flex flex-row items-center  justify-between w-full px-5 rounded-lg bg-gray-100 border border-gray-100 mt-5 py-2'>
             <View className='flex-1 flex- flex-row items-center justify-start z-50'>
                 <Image source={icons.search} className='size-5' />
                 <TextInput value={search}
