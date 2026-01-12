@@ -1,26 +1,31 @@
-import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import icons from "@/constants/icons";
+import images from "@/constants/images";
+import { Image, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
 
 export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text className="font-bold text-lg my-10">Welcome to Qiera</Text>
-      <Link href="/sign-in"> Sign In</Link>
-      <Link href="/explore"> Explore</Link>
+   <SafeAreaView className="bg-white h-full">
+    <ScrollView>
+      <View className="px-5">
+        <View className="flex flex-row justify-between relative items-center mt-5">
 
-      <Link href="/profile"> Profile</Link>
+        <View className="flex flex-row items-center"> 
+          <Image source={images.avatar} className="size-12 rounded-full" /> 
+          <View className="flex flex-col items-start ml-2 justify-center">
+            <Text className="text-xs font-rubik text-gray-800">Welcome </Text>
+            <Text className="text-base font-rubik">Loki</Text>
+          </View>
+          
+          </View>
 
-      <Link href="/properties/1"> Properties</Link>
-
-    </View>
+          <Image source={icons.bell} className="size-6"/>
+      </View>
+      </View>
+    </ScrollView>
+   </SafeAreaView>
   );
 }

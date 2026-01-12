@@ -1,3 +1,4 @@
+import GlobalProvider from "@/lib/global-provider";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -24,6 +25,10 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) return null;
+return (
+  <GlobalProvider>
+    <Stack screenOptions={{ headerShown: false }} />
+  </GlobalProvider>
+);
 
-  return <Stack />;
 }
