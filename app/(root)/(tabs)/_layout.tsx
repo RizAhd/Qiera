@@ -61,6 +61,17 @@ const TabsLayout = () => {
                     ),
                 }}
             />
+              <Tabs.Screen
+                name="saved"
+                options={{
+                    title: 'Saved',
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        <TabIcon icon={icons.person} focused={focused} title="Saved" />
+                    ),
+                }}
+            />
+            
             <Tabs.Screen
                 name="profile"
                 options={{
@@ -71,7 +82,7 @@ const TabsLayout = () => {
                     ),
                 }}
             />
-            
+             
         </Tabs>
     );
 };

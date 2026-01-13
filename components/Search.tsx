@@ -17,29 +17,27 @@ const Search = () => {
         }, 500
     );
 
-
     const handleSearch = (text: string) => {
         setSearch(text)
         debounceSearch(text)
     }
-    return (
-        <View className='flex flex-row items-center  justify-between w-full px-5 rounded-lg bg-gray-100 border border-gray-100 mt-5 py-2'>
-            <View className='flex-1 flex- flex-row items-center justify-start z-50'>
-                <Image source={icons.search} className='size-5' />
-                <TextInput value={search}
-                    onChangeText={handleSearch}
-                    placeholder='Search For Anything                       '
-                    className='text-sm font-rubik text-black ml-2 text-1'
-                />
 
+    return (
+        <View className='flex flex-row items-center justify-between w-full px-5 rounded-lg bg-gray-100 border border-gray-100 mt-5 py-2'>
+            <View className='flex-1 flex-row items-center justify-start z-50'>
+                <Image source={icons.search} className='size-5' />
+                <TextInput
+                    value={search}
+                    onChangeText={handleSearch}
+                    placeholder='Search For Anything'
+                    className='flex-1 text-sm font-rubik text-black ml-2'
+                />
             </View>
             <TouchableOpacity>
                 <Image source={icons.filter} className='size-5' />
             </TouchableOpacity>
-
-
         </View>
     )
 }
 
-export default Search
+export default Search;
