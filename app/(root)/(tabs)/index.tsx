@@ -1,7 +1,6 @@
 import { Cards, FeaturedCards } from '@/components/Cards';
 import Filters from '@/components/Filters';
 import NoResults from '@/components/NoResults';
-import Search from '@/components/Search';
 import icons from "@/constants/icons";
 import { getLatestProperties, getProperties } from '@/lib/appwrite';
 import { useGlobalContext } from '@/lib/global-provider';
@@ -75,7 +74,7 @@ export default function Index() {
               <Image source={icons.bell} className="size-6" />
             </View>
 
-            <Search />
+        
 
             {/* Featured Properties */}
             <View className="my-5">

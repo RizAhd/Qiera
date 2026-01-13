@@ -87,7 +87,7 @@ const handleSave = async () => {
           </TouchableOpacity>
 <TouchableOpacity className="absolute top-4 right-4 rounded-full size-11 items-center justify-center z-50" onPress={handleSave}>
   <Image
-    source={saved ? icons.heart : icons.heart}
+    source={saved ? icons.heart2 : icons.heart}
     className="size-9"
   />
 </TouchableOpacity>
