@@ -105,7 +105,7 @@ export async function getLatestProperties() {
         const result = await databases.listDocuments(
             config.databaseId!,
             config.propertiesTableId!,
-            [Query.orderAsc('$createdAt'), Query.limit(5)]
+            [Query.orderDesc('$createdAt'), Query.limit(5)]
         )
 
         return result.documents
@@ -153,4 +153,26 @@ export async function getProperties({ filter, query, limit }: { filter: string; 
         return [];
     }
 
+}
+
+export async function getPropertyById({id} : {id:string}) {
+
+    try {
+
+        const result = await databases.getDocument(
+
+            config.databaseId!,
+            config.propertiesTableId!,
+            
+            id
+
+        )
+
+        return result
+        
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+    
 }
