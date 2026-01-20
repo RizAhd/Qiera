@@ -3,6 +3,7 @@ import backArrow from "@/assets/icons/back-arrow.png";
 import bath from "@/assets/icons/bath.png";
 import bed from "@/assets/icons/bed.png";
 import bell from "@/assets/icons/bell.png";
+import saved from "@/assets/icons/bookmark.png";
 import calendar from "@/assets/icons/calendar.png";
 import carPark from "@/assets/icons/car-park.png";
 import chat from "@/assets/icons/chat.png";
@@ -68,4 +69,5 @@ export default {
   wifi,
   location,
   edit,
+  saved
 };

@@ -67,7 +67,7 @@ const TabsLayout = () => {
                     title: 'Saved',
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
-                        <TabIcon icon={icons.person} focused={focused} title="Saved" />
+                        <TabIcon icon={icons.saved} focused={focused} title="Saved" />
                     ),
                 }}
             />

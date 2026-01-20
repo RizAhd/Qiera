@@ -1,3 +1,4 @@
+import ChatBot from "@/components/ChatBot"; // Add this import
 import GlobalProvider from "@/lib/global-provider";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -7,12 +8,7 @@ import "./globals.css";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    "Rubik-Bold": require("../assets/fonts/Rubik-Bold.ttf"),
-    "Rubik-ExtraBold": require("../assets/fonts/Rubik-ExtraBold.ttf"),
-    "Rubik-Light": require("../assets/fonts/Rubik-Light.ttf"),
-    "Rubik-Medium": require("../assets/fonts/Rubik-Medium.ttf"),
-    "Rubik-Regular": require("../assets/fonts/Rubik-Regular.ttf"),
-    "Rubik-SemiBold": require("../assets/fonts/Rubik-SemiBold.ttf"),
+    // ... your fonts
   });
 
   useEffect(() => {
@@ -25,10 +21,12 @@ export default function RootLayout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) return null;
-return (
-  <GlobalProvider>
-    <Stack screenOptions={{ headerShown: false }} />
-  </GlobalProvider>
-);
 
+  return (
+    <GlobalProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+      {/* Add ChatBot globally */}
+      <ChatBot />
+    </GlobalProvider>
+  );
 }

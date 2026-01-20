@@ -4,7 +4,7 @@
     "slug": "Qiera",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/1.jpg",
+    "icon": "./assets/images/1.png",
     "scheme": "qiera",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,7 +14,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
-        "foregroundImage": "./assets/images/1.jpg"
+        "foregroundImage": "./assets/images/1.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
@@ -28,7 +28,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/1.jpg",
+          "image": "./assets/images/1.png",
           "resizeMode": "cover",
          
           "enableFullScreenImage_legacy": true,
