@@ -1,15 +1,18 @@
+// components/ChatBot.tsx
 import icons from '@/constants/icons';
+import { useChatBot } from "@/context/ChatBotContext";
 import React, { useEffect, useRef, useState } from 'react';
 import {
-    Animated,
-    FlatList,
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Animated,
+  FlatList,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const FAQ_QUESTIONS = [
@@ -52,7 +55,16 @@ type Message = {
   timestamp: Date;
 };
 
-const ChatBot = () => {
+interface ChatBotProps {
+  isVisible?: boolean;
+}
+
+const ChatBot: React.FC<ChatBotProps> = ({ isVisible = true }) => {
+  const { isChatBotVisible } = useChatBot();
+  
+  // Don't render if not visible via context
+  if (!isChatBotVisible) return null;
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -63,10 +75,35 @@ const ChatBot = () => {
   ]);
   const [inputText, setInputText] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
   const flatListRef = useRef<FlatList>(null);
+  const textInputRef = useRef<TextInput>(null);
 
+  // Listen to keyboard events
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  // Animation effects
   useEffect(() => {
     if (isOpen) {
       Animated.parallel([
@@ -80,7 +117,12 @@ const ChatBot = () => {
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]).start(() => {
+        // Auto-focus input when chat opens
+        setTimeout(() => {
+          textInputRef.current?.focus();
+        }, 350);
+      });
     } else {
       Animated.parallel([
         Animated.timing(fadeAnim, {
@@ -94,6 +136,7 @@ const ChatBot = () => {
           useNativeDriver: true,
         }),
       ]).start();
+      Keyboard.dismiss();
     }
   }, [isOpen]);
 
@@ -104,20 +147,30 @@ const ChatBot = () => {
     if (normalizedQuestion.includes('book') || normalizedQuestion.includes('reserve')) {
       return FAQ_QUESTIONS[0].answer;
     }
-    if (normalizedQuestion.includes('visit') || normalizedQuestion.includes('tour')) {
+    if (normalizedQuestion.includes('visit') || normalizedQuestion.includes('tour') || normalizedQuestion.includes('schedule')) {
       return FAQ_QUESTIONS[1].answer;
     }
-    if (normalizedQuestion.includes('payment') || normalizedQuestion.includes('pay')) {
+    if (normalizedQuestion.includes('payment') || normalizedQuestion.includes('pay') || normalizedQuestion.includes('method')) {
       return FAQ_QUESTIONS[2].answer;
     }
-    if (normalizedQuestion.includes('save') || normalizedQuestion.includes('favorite')) {
+    if (normalizedQuestion.includes('save') || normalizedQuestion.includes('favorite') || normalizedQuestion.includes('bookmark')) {
       return FAQ_QUESTIONS[3].answer;
     }
-    if (normalizedQuestion.includes('utility') || normalizedQuestion.includes('bill')) {
+    if (normalizedQuestion.includes('utility') || normalizedQuestion.includes('bill') || normalizedQuestion.includes('included')) {
       return FAQ_QUESTIONS[4].answer;
     }
-    if (normalizedQuestion.includes('cancel') || normalizedQuestion.includes('refund')) {
+    if (normalizedQuestion.includes('cancel') || normalizedQuestion.includes('refund') || normalizedQuestion.includes('policy')) {
       return FAQ_QUESTIONS[5].answer;
+    }
+    
+    // Check for greetings
+    if (normalizedQuestion.includes('hello') || normalizedQuestion.includes('hi') || normalizedQuestion.includes('hey')) {
+      return 'Hello! How can I assist you with your real estate needs today?';
+    }
+    
+    // Check for thanks
+    if (normalizedQuestion.includes('thank') || normalizedQuestion.includes('thanks')) {
+      return 'You\'re welcome! Is there anything else I can help you with?';
     }
     
     // Default response if no match
@@ -146,6 +199,7 @@ const ChatBot = () => {
     setMessages(prev => [...prev, userMessage, botResponse]);
     setInputText('');
     
+    // Scroll to bottom and dismiss keyboard
     setTimeout(() => {
       flatListRef.current?.scrollToEnd({ animated: true });
     }, 100);
@@ -170,6 +224,7 @@ const ChatBot = () => {
     
     setTimeout(() => {
       flatListRef.current?.scrollToEnd({ animated: true });
+      textInputRef.current?.focus();
     }, 100);
   };
 
@@ -238,8 +293,11 @@ const ChatBot = () => {
               <Text className="text-xs text-gray-500">Usually replies instantly</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={() => setIsOpen(false)}>
-            <Text className="text-blue-600 font-rubikBold">Close</Text>
+          <TouchableOpacity 
+            onPress={() => setIsOpen(false)}
+            className="w-10 h-10 items-center justify-center"
+          >
+            <Text className="text-blue-600 font-rubikBold text-lg">×</Text>
           </TouchableOpacity>
         </View>
 
@@ -255,7 +313,8 @@ const ChatBot = () => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => handleQuickQuestion(item.question)}
-                className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 mr-2"
+                className="bg-blue-50 border border-blue-100 rounded-xl px-3 py-2 mr-2 active:bg-blue-100"
+                activeOpacity={0.7}
               >
                 <Text className="text-xs text-blue-800 font-rubik" numberOfLines={2}>
                   {item.question}
@@ -266,11 +325,8 @@ const ChatBot = () => {
           />
         </View>
 
-        {/* Messages */}
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          className="flex-1"
-        >
+        {/* Messages Container */}
+        <View className="flex-1">
           <FlatList
             ref={flatListRef}
             data={messages}
@@ -279,21 +335,35 @@ const ChatBot = () => {
             className="flex-1 px-4 pt-4"
             showsVerticalScrollIndicator={false}
             onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+            contentContainerStyle={{ paddingBottom: 10 }}
           />
+        </View>
 
-          {/* Input Area */}
-          <View className="flex-row items-center px-4 py-3 border-t border-gray-200">
+        {/* Input Area with KeyboardAvoidingView */}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+          style={{
+            marginBottom: keyboardHeight > 0 ? (Platform.OS === 'ios' ? keyboardHeight - 34 : 0) : 0,
+          }}
+        >
+          <View className="flex-row items-center px-4 py-3 border-t border-gray-200 bg-white">
             <TextInput
+              ref={textInputRef}
               value={inputText}
               onChangeText={setInputText}
               placeholder="Type your question..."
               className="flex-1 bg-gray-100 rounded-full px-4 py-3 font-rubik text-black"
               onSubmitEditing={handleSend}
               returnKeyType="send"
+              placeholderTextColor="#9CA3AF"
+              blurOnSubmit={false}
+              multiline={false}
             />
             <TouchableOpacity
               onPress={handleSend}
-              className="ml-3 bg-blue-600 w-12 h-12 rounded-full items-center justify-center"
+              className="ml-3 bg-blue-600 w-12 h-12 rounded-full items-center justify-center active:bg-blue-700"
+              activeOpacity={0.8}
             >
               <Image source={icons.send} className="w-5 h-5" tintColor="#fff" />
             </TouchableOpacity>

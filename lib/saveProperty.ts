@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const KEY = 'SAVED_PROPERTIES';
+const KEY = 'SAVED_PROPERTIES'; 
 
 export async function getSavedProperties(): Promise<string[]> {
   const data = await AsyncStorage.getItem(KEY);
